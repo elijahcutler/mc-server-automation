@@ -2,10 +2,6 @@
 
 ## Local development
 
-### Setup
-
-1. `python -m venv .venv`
-
 ### Start local server
 
 1. `source .venv/bin/activate`
