@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "name": "🏢 Infrastructure",
+      "path": "../infrastructure"
+    },
+    {
+      "name": "⚡️ Functions",
+      "path": "../functions"
+    },
+    {
+      "name": "🌎 Everything",
+      "path": "../"
+    }
+  ],
+  "settings": {
+    "debug.internalConsoleOptions": "neverOpen"
+  }
+}
