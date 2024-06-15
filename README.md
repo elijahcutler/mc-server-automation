@@ -1,5 +1,5 @@
 # Minecraft Server Automation
-### Using Azure Virtual Machine Management, Discord, and Python
+## Using Azure Virtual Machine Management & Discord
 
 Runs a Discord bot that waits for commands in a channel of your choosing.
 
