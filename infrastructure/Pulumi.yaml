@@ -2,7 +2,7 @@ name: mc-server-automation
 runtime:
   name: python
   options:
-    virtualenv: venv
+    virtualenv: .venv
 description: A minimal Azure Native Python Pulumi program
 config:
   pulumi:tags:
