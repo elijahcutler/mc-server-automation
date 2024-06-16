@@ -1,7 +1,7 @@
 {
   "folders": [
     {
-      "name": "🏢 Infrastructure",
+      "name": "🧱 Infrastructure",
       "path": "../infrastructure"
     },
     {
@@ -9,8 +9,8 @@
       "path": "../functions"
     },
     {
-      "name": "🌎 Everything",
-      "path": "../"
+      "name": "💿 Server",
+      "path": "../server"
     }
   ],
   "settings": {
