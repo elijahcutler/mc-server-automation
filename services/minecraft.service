@@ -1,0 +1,15 @@
+[Unit]
+Description=Minecraft Server
+After=network.target
+
+[Service]
+User=minecraft
+WorkingDirectory=/home/minecraft/server/
+ExecStart=/usr/bin/java -Xms4G -Xmx6G -jar /home/minecraft/server/server.jar nogui
+SuccessExitStatus=0 1
+Restart=on-failure
+StandardOutput=append:/home/minecraft/server/minecraft-server.log
+StandardError=append:/home/minecraft/server/minecraft-server.log
+
+[Install]
+WantedBy=multi-user.target

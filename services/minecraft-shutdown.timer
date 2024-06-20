@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Minecraft Shutdown Check Every Minute
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=1min
+Unit=minecraft-shutdown.service
+
+[Install]
+WantedBy=timers.target

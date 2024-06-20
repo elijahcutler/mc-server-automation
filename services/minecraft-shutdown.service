@@ -1,0 +1,10 @@
+[Unit]
+Description=Minecraft Server Inactivity Check and Shutdown
+After=minecraft.service
+
+[Service]
+Type=oneshot
+ExecStart=/home/minecraft/server/check-minecraft-players.sh
+
+[Install]
+WantedBy=multi-user.target
