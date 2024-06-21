@@ -9,6 +9,7 @@ fi
 # Variables
 DROPBOX_URL="your_dropbox_shared_link_here"
 RCON_URL="https://github.com/gorcon/rcon-cli/releases/download/v0.10.3/rcon-0.10.3-amd64_linux.tar.gz"
+CHECK_SCRIPT_URL="https://github.com/elijahcutler/mc-server-automation/raw/main/scripts/check-minecraft-players.sh"
 SERVICE_FILES=(
     "https://github.com/elijahcutler/mc-server-automation/raw/3b284134d0051ed0028f28ad216263f60ee485f0/services/minecraft.service"
     "https://github.com/elijahcutler/mc-server-automation/raw/3b284134d0051ed0028f28ad216263f60ee485f0/services/minecraft-shutdown.service"
@@ -17,6 +18,7 @@ SERVICE_FILES=(
 SCRIPT_NAME="$(basename "$0")"
 DOWNLOAD_DIR="/home/minecraft/downloads"
 SERVER_DIR="/home/minecraft/server"
+SCRIPTS_DIR="/home/minecraft/scripts"
 SERVICES_BACKUP_DIR="/home/minecraft/services-backup"
 SYSTEMD_DIR="/etc/systemd/system"
 
@@ -40,12 +42,10 @@ start_and_enable_service() {
 
 # Function to make scripts executable
 make_scripts_executable() {
-    for script in check-minecraft-players.sh manual-start-server.sh; do
-        local script_path="$SERVER_DIR/$script"
-        if [ -f "$script_path" ] && [ ! -x "$script_path" ]; then
-            chmod +x "$script_path"
-        fi
-    done
+    local check_script_path="$SCRIPTS_DIR/check-minecraft-players.sh"
+    if [ -f "$check_script_path" ] && [ ! -x "$check_script_path" ]; then
+        chmod +x "$check_script_path"
+    fi
 }
 
 # Function to check the status of services
@@ -99,9 +99,14 @@ if ! id -u minecraft >/dev/null 2>&1; then
     usermod -aG wheel minecraft
 fi
 
-# Create downloads directory
-mkdir -p "$DOWNLOAD_DIR"
-chown minecraft:minecraft "$DOWNLOAD_DIR"
+# Create necessary directories
+mkdir -p "$DOWNLOAD_DIR" "$SCRIPTS_DIR"
+chown minecraft:minecraft "$DOWNLOAD_DIR" "$SCRIPTS_DIR"
+
+# Download check-minecraft-players.sh
+wget -O "$SCRIPTS_DIR/check-minecraft-players.sh" "$CHECK_SCRIPT_URL"
+chmod +x "$SCRIPTS_DIR/check-minecraft-players.sh"
+chown minecraft:minecraft "$SCRIPTS_DIR/check-minecraft-players.sh"
 
 # Check if /home/minecraft/server/ and /home/minecraft/services-backup/ exist
 if [ -d "$SERVER_DIR" ] && [ -d "$SERVICES_BACKUP_DIR" ]; then
@@ -143,6 +148,18 @@ fi
 # Move server directory
 mv "$DOWNLOAD_DIR/$EXTRACTED_FOLDER/server" /home/minecraft
 chown -R minecraft:minecraft "$SERVER_DIR"
+
+# Ensure only one jar file exists and rename it to server.jar
+JAR_FILES=("$SERVER_DIR"/*.jar)
+if [ ${#JAR_FILES[@]} -eq 0 ]; then
+    echo "Error: No .jar file found in the server directory."
+    exit 1
+elif [ ${#JAR_FILES[@]} -gt 1 ]; then
+    echo "Error: Multiple .jar files found in the server directory. Please ensure only one .jar file is present."
+    exit 1
+else
+    mv "${JAR_FILES[0]}" "$SERVER_DIR/server.jar"
+fi
 
 # Install service files
 install_service_files
