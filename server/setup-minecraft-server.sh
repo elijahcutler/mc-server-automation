@@ -32,19 +32,19 @@ install_package jq
 
 # Variables
 RCON_URL="https://github.com/gorcon/rcon-cli/releases/download/v0.10.3/rcon-0.10.3-amd64_linux.tar.gz"
-CHECK_SCRIPT_URL="https://github.com/elijahcutler/mc-server-automation/raw/main/scripts/check-minecraft-players.sh"
+CHECK_SCRIPT_URL="https://raw.githubusercontent.com/elijahcutler/mc-server-automation/main/scripts/check-minecraft-players.sh"
 SERVICE_FILES=(
-    "https://github.com/elijahcutler/mc-server-automation/raw/3b284134d0051ed0028f28ad216263f60ee485f0/services/minecraft.service"
-    "https://github.com/elijahcutler/mc-server-automation/raw/3b284134d0051ed0028f28ad216263f60ee485f0/services/minecraft-shutdown.service"
-    "https://github.com/elijahcutler/mc-server-automation/raw/3b284134d0051ed0028f28ad216263f60ee485f0/services/minecraft-shutdown.timer"
+    "https://raw.githubusercontent.com/elijahcutler/mc-server-automation/main/services/minecraft.service"
+    "https://raw.githubusercontent.com/elijahcutler/mc-server-automation/main/services/minecraft-shutdown.service"
+    "https://raw.githubusercontent.com/elijahcutler/mc-server-automation/main/services/minecraft-shutdown.timer"
 )
 DOWNLOAD_DIR="/home/minecraft/downloads"
 SERVER_DIR="/home/minecraft/server"
 SCRIPTS_DIR="/home/minecraft/scripts"
 SERVICES_BACKUP_DIR="/home/minecraft/services-backup"
 SYSTEMD_DIR="/etc/systemd/system"
-EULA_URL="https://github.com/elijahcutler/mc-server-automation/raw/main/server/.defaults/eula.txt"
-SERVER_PROPERTIES_URL="https://github.com/elijahcutler/mc-server-automation/raw/main/server/.defaults/server.properties"
+EULA_URL="https://raw.githubusercontent.com/elijahcutler/mc-server-automation/main/server/.defaults/eula.txt"
+SERVER_PROPERTIES_URL="https://raw.githubusercontent.com/elijahcutler/mc-server-automation/main/server/.defaults/server.properties"
 
 # Function to start and enable a service if not already enabled
 start_and_enable_service() {
