@@ -307,6 +307,7 @@ install_service_files
 make_scripts_executable
 
 # Enable and start the services
+systemctl daemon-reload
 start_and_enable_service minecraft.service
 start_and_enable_service minecraft-shutdown.service
 start_and_enable_service minecraft-shutdown.timer
