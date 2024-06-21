@@ -93,9 +93,6 @@ check_and_install_rcon() {
     fi
 }
 
-# Check and install rcon
-check_and_install_rcon
-
 # Firewall configuration
 firewall-cmd --zone=public --add-port=25565/tcp --permanent
 firewall-cmd --zone=public --add-port=25575/tcp --permanent
@@ -109,8 +106,11 @@ if ! id -u minecraft >/dev/null 2>&1; then
 fi
 
 # Create necessary directories
-mkdir -p "$DOWNLOAD_DIR" "$SCRIPTS_DIR"
-chown minecraft:minecraft "$DOWNLOAD_DIR" "$SCRIPTS_DIR"
+mkdir -p "$DOWNLOAD_DIR" "$SCRIPTS_DIR" "$SERVER_DIR" "$SERVICES_BACKUP_DIR"
+chown minecraft:minecraft "$DOWNLOAD_DIR" "$SCRIPTS_DIR" "$SERVER_DIR" "$SERVICES_BACKUP_DIR"
+
+# Check and install rcon
+check_and_install_rcon
 
 # Download check-minecraft-players.sh
 wget -O "$SCRIPTS_DIR/check-minecraft-players.sh" "$CHECK_SCRIPT_URL"
