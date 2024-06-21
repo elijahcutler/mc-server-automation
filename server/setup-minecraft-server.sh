@@ -27,11 +27,11 @@ install_package() {
 
 # Install necessary packages
 install_package firewalld
-install_package java-21-openjdk
 install_package jq
 
 # Variables
 RCON_URL="https://github.com/gorcon/rcon-cli/releases/download/v0.10.3/rcon-0.10.3-amd64_linux.tar.gz"
+JAVA_URL="https://corretto.aws/downloads/latest/amazon-corretto-22-x64-linux-jdk.tar.gz"
 CHECK_SCRIPT_URL="https://raw.githubusercontent.com/elijahcutler/mc-server-automation/main/scripts/check-minecraft-players.sh"
 SERVICE_FILES=(
     "https://raw.githubusercontent.com/elijahcutler/mc-server-automation/main/services/minecraft.service"
@@ -93,6 +93,37 @@ check_and_install_rcon() {
     fi
 }
 
+# Check if java is installed, if not then install it
+check_and_install_java() {
+    local DOWNLOAD_DIR="/opt/java"
+
+    if command -v java &>/dev/null; then
+        echo "Java is already installed."
+        java -version
+    else
+        echo "Installing Java..."
+        mkdir -p "$DOWNLOAD_DIR"
+        wget -O "$DOWNLOAD_DIR/java.tar.gz" "$JAVA_URL"
+        tar -xzvf "$DOWNLOAD_DIR/java.tar.gz" -C "$DOWNLOAD_DIR"
+        
+        # Assuming the extracted directory name starts with "amazon-corretto-22"
+        JAVA_DIR=$(find "$DOWNLOAD_DIR" -maxdepth 1 -type d -name "amazon-corretto-22*")
+        if [ -d "$JAVA_DIR" ]; then
+            update-alternatives --install /usr/bin/java java "$JAVA_DIR/bin/java" 1
+            update-alternatives --install /usr/bin/javac javac "$JAVA_DIR/bin/javac" 1
+            update-alternatives --set java "$JAVA_DIR/bin/java"
+            update-alternatives --set javac "$JAVA_DIR/bin/javac"
+            echo "Java installed successfully."
+        else
+            echo "Java installation failed: extracted directory not found."
+            exit 1
+        fi
+
+        # Clean up
+        rm -rf "$DOWNLOAD_DIR/java.tar.gz"
+    fi
+}
+
 # Firewall configuration
 firewall-cmd --zone=public --add-port=25565/tcp --permanent
 firewall-cmd --zone=public --add-port=25575/tcp --permanent
@@ -111,6 +142,9 @@ chown minecraft:minecraft "$DOWNLOAD_DIR" "$SCRIPTS_DIR" "$SERVER_DIR" "$SERVICE
 
 # Check and install rcon
 check_and_install_rcon
+
+# Check and install java
+check_and_install_java
 
 # Download check-minecraft-players.sh
 wget -O "$SCRIPTS_DIR/check-minecraft-players.sh" "$CHECK_SCRIPT_URL"
