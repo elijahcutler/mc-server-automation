@@ -4,7 +4,7 @@ After=minecraft.service
 
 [Service]
 Type=oneshot
-ExecStart=/home/minecraft/server/check-minecraft-players.sh
+ExecStart=/home/minecraft/scripts/check-minecraft-players.sh
 
 [Install]
 WantedBy=multi-user.target
